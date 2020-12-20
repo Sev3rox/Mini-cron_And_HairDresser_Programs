@@ -1,0 +1,58 @@
+DOKUMENTACJA PROJEKTOWA
+
+Systemy Operacyjne 
+PS3
+Temat projektu: 3.Mini-cron
+
+Projekt zrealizowali:
+1. Maciej Jaroszewski
+2. Marcin Kociński
+
+W projekcie zaimplementowano wszelkie przewidziane funkcjonalności, a mianowicie:
+- Demon wczytuje zadania z pliku i porządkuje je chronologicznie, a następnie zasypia na określony czas.
+- Demon budzi się, kiedy nadejdzie czas wykonania zadania, tworzy procesu potomny wykonujący zadanie, a sam zasypia do czasu kolejnego zadania.
+- Proces potomny wykonuje zadanie uruchamiając nowy proces (lub grupę procesów tworzącą potok w przypadku obsługi potoków).
+- Obsługa potoków, w miejscu może wystąpić ciąg poleceń odseparowany znakami | (np. ls -l|wc -l). W takiej sytuacji standardowe wyjście polecenia przesyłane jest do wejścia kolejnego.
+- Demon kończy pracę po otrzymaniu sygnału SIGINT i ewentualnym zakończeniu bieżącego zadania (zadań).
+- Informacje zlecane przez użytkownika (standardowe wejście/wyjście) są dopisywane do pliku outfile, poprzedzone informacją o poleceniu, które je wygenerowało.
+- Po otrzymaniu sygnału SIGUSR1 demon ponownie wczytuje zadania z pliku, porzucając ewentualne nie wykonane jeszcze zadania. 
+- Po otrzymaniu sygnału SIGUSR2 demon wpisuje do logu systemowego listę zadań, jakie pozostały do wykonania. 
+- Informacje o uruchomieniu zadania i kodzie wyjścia zakończonego zadania umieszczane są w logu systemowym.
+
+Instrukcja uruchomienia i testowania demona:
+./skrypt
+make
+./minicron <taskfile> <outfile>
+
+gdzie:
+skrypt - tworzy pliki In.txt z poleceniami oraz pusty plik Out.txt
+Zawartośc pliku In.txt:
+20:20:ls -l|wc -l:2
+20:21:ls -l:2
+20:22:ls:1
+20:23:ls -l -a:0
+Czas - należy dostosować do obecnego +1 lub +2 minuty by nie czekać zbyt długo;
+
+make - tworzy gotowy do działania program "minicron".
+
+taskfile - plik zawierający zadania w formacie: <hour>:<minutes>:<command>:<mode> np. "20:20:ls -l|wc -l:2" które demon ma wykonać.
+outfile - plik zawierający wszelkie wyjścia poleceń wykonanych przez demona.
+
+		hour,minutes - są czasem w którym powinno się wykonać polecenie. 
+		command -  jest dowolnym programem.
+		Parametr mode -  może mieć jedną z trzech wartości:
+				0 - użytkownik chce otrzymać treść, jaką polecenie wypisało na standardowe wyjście (stdout).
+				1 - użytkownik chce otrzymać treść, jaką polecenie wypisało na wyjście błędów (stderr).
+				2 - użytkownik chce otrzymać treść, jaką polecenie wypisało na standardowe wyjście i wyjście błędów.
+Przykład:
+./skrypt
+make
+./minicron In.txt Out.txt
+
+Zawartośc pliku In.txt:
+20:20:ls -l|wc -l:2
+20:21:ls -l:2
+20:22:ls:0
+20:23:ls -l -a:1
+
+Plik Out.txt jest pusty, a po wykonaniu polecenia w zależności od parametru mode jest tam wpisywane wyście polecenia.

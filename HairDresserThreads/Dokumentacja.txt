@@ -1,0 +1,43 @@
+DOKUMENTACJA PROJEKTOWA
+
+Systemy Operacyjne 
+PS3
+Projekt 2
+Temat projektu: 3.Problem śpiącego fryzjera
+
+Projekt zrealizowali:
+1. Maciej Jaroszewski
+2. Marcin Kociński
+
+Zostały wykonane obydwie wersje programu, mianowicie:
+- bez wykorzystania zmiennych warunkowych (tylko mutexy/semafory)
+- wykorzystując zmienne warunkowe (condition variables)
+
+Czytanie informacji z terminalu:
+
+Res:5 WRomm: 6/20 [in: 7]
+Poczekalnia: 3 2 1
+Nie weszli: 3 2 1
+
+[in:-1] - oznacza ze nikogo nie ma u fryzjera
+Res - liczba osób, które nie dostały się do poczekalni
+WRomm - liczba osób znajdujących się w poczekalni na liczbę dostępnych miejsc w poczekalni
+in - numer klienta, który w danej chwili obłsługiwany jest przez fryzjera
+Poczekalnia - osoby w poczekalni w kolejności pierwszy od prawej 
+Nie weszli - osoby które nie weszły do fryzjera w kolejności pierwszy od prawej
+
+Nazwy programów:
+FryzjerSemafory
+FryzjerWarunkowe
+
+Instrukcja uruchomienia:
+make
+./FryzjerSemafory --Clients 15 --Chairs 3 --Debug
+Identycznie w przypadku FryzjerWarunkowe
+Podanie wszystkich parametrów prócz "--Debug" jest wymagane aby program mógł się wykonać.
+Gdzie:
+make - tworzy gotowy do działania program "FryzjerWarunkowe" lub "FryzjerSemafory" w zależności w którym folderu zsotanie wywołane.
+--Clients - liczba klientów (wątków klienta), którzy będą chcieli przyjść do fryzjera
+--Chairs - liczba dostępnych miejsc w poczekalni
+--Debug - opcja umożliwiająca wypisywanie na standardowe wyjście dodatkowo listy klientów czekających
+ w poczekalni i listy klientów, którzy nie dostali się do fryzjera z powodu braku miejsc w poczekalni.

@@ -1,0 +1,8 @@
+#!/bin/bash
+touch In.txt Out.txt
+printf "20:20:ls -l|wc -l:2\n20:21:ls -l:2\n20:22:ls:0\n20:23:ls -l -a:1" > In.txt
+
+
+
+echo"Utworzono pliki"
+
